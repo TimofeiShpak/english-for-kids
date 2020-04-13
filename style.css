@@ -3,6 +3,7 @@
     margin: 0;
     font-family: 'Roboto', sans-serif;
 }
+
 input[type=checkbox]{
     height: 0;
     width: 0;
@@ -181,6 +182,19 @@ label:active:after {
     text-decoration: none;
     color: black;
     font-size: 26px;
+}
+
+.card b{
+    margin-bottom: 10px;
+}
+
+.card-game {
+    border-radius: 0px;
+    background: none;
+    justify-content: flex-end;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 250px;
 }
 
 .cardPlay {
