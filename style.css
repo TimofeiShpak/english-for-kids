@@ -2,6 +2,7 @@
     padding: 0;
     margin: 0;
     font-family: 'Roboto', sans-serif;
+    outline: none;
 }
 
 input[type=checkbox]{
@@ -24,9 +25,8 @@ label {
     padding-left: 10px;
     color: white;
     font-size: 24px;
+    margin-top: -19px;
 }
-
-
 
 label:after {
     content: '';
@@ -81,6 +81,10 @@ label:active:after {
     opacity: 0;
 }
 
+#burgerMenu:hover {
+    cursor: pointer;
+}
+
 .menu span{
     z-index: 2;
     display: block;
@@ -119,6 +123,7 @@ label:active:after {
 }
 
 .list-menu {
+    z-index: 1;
     background-color: #00BFFF;
     display: flex;
     flex-direction: column;
@@ -127,8 +132,12 @@ label:active:after {
     height: 100vh;
     margin: -80px 0 0;
     padding: 150px 0px 50px 100px;
-    left: -500px;
+    left: -620px;
     list-style-type: none;
+}
+
+.page-link:hover{
+    text-decoration: underline;
 }
 
 .list-menu-label{
@@ -182,6 +191,13 @@ label:active:after {
     text-decoration: none;
     color: black;
     font-size: 26px;
+    transition: 0.5s, transform 0s;
+}
+
+.card:hover{
+    box-shadow: 0px 2px 20px 0 rgba(0,0,0,0.5);
+    font-weight: bold;
+    font-size: 28px;
 }
 
 .card b{
@@ -189,13 +205,15 @@ label:active:after {
 }
 
 .card-game {
+    align-items: flex-end;
+    flex-direction: row;
     border-radius: 0px;
-    background: none;
-    justify-content: flex-end;
-    background-repeat: no-repeat;
-    background-size: contain;
+    justify-content: center;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
     height: 240px;
     padding-bottom: 10px;
+    transform: rotateY(0deg);
 }
 
 .cardPlay {
@@ -211,8 +229,319 @@ label:active:after {
         margin: 30px auto;
 }
 
-@media (max-width: 1430px){
-    .header{
-        max-width: 1000px;
+.cardGame {
+    background-size: cover !important;
+    background-position-x: -30px !important;
+}
+
+.card-active{
+    opacity: 0.4;
+}
+
+.card-notrotate{
+    transform: rotateY(0deg);
+    transition: transform 0.4s !important;
+}
+
+.button-rotate {
+    position: absolute;
+    width: 33px;
+    height: 28px;
+    background-color: black;
+    margin-left: 125px;
+    background: url("img/rotate.png");
+    background-repeat: no-repeat;
+    margin-top: 2px;
+    border: 1px solid transparent;
+}
+
+.button-rotate:hover{
+    border: 1px solid grey;
+    box-shadow: 0px 1px 4px 0 rgba(0,0,0,0.5);
+    border-radius: 50%;
+}
+
+.animation-rotate{
+    transition: 0s !important;
+}
+
+.button-start{
+    margin-left: 25%;
+    font-size: 28px;
+    color: white;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: none;
+    width: 50%;
+    height: 60px;
+    background: linear-gradient(to top,#228B22,#32CD32);
+}
+
+.button-start-active{
+    width: 30%;
+    margin-left: 35%;
+}
+
+.raiting{
+    height: 57px;
+    display: flex;
+    width: 1350px;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.star-win {
+    min-width: 57px;
+    transform: scale(0.7);
+    background: url("./img/star-win.svg");
+}
+
+.star {
+    min-width: 57px;
+    transform: scale(0.7);
+    background: url("./img/star.svg");
+}
+
+.visible{
+    opacity: 0;
+}
+
+.lose {
+    background: url(./img/failure.jpg);
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+}
+
+.win {
+    background: url(./img/success.jpg);
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+}
+
+.text {
+    display: flex;
+    color: red;
+    font-size: 30px;
+    justify-content: center;
+}
+
+.statistic{
+    margin: 40px auto;
+    max-width: 1300px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+}
+
+.cursor:hover{
+    cursor: pointer;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    min-width: 350px;
+}
+
+.name-statistics{
+    margin: auto;
+    font-size: 3em;
+}
+
+.word {
+    width: 110%;
+    display: flex;
+    margin-top: 10px;
+    font-size: 24px;
+}
+
+.statistic-wrapper{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.word-text{
+    min-width: 110px;
+}
+
+.translation{
+    min-width: 200px;
+}
+
+.clicks{
+    min-width: 36px;
+    width: 15%;
+}
+
+.correct{
+    min-width: 45px;
+    width: 18%;
+}
+
+.error{
+    min-width: 36px;
+    width: 15%;
+}
+
+.percent {
+    min-width: 19px;
+}
+
+.reset {
+    margin-left: 37.5%;
+    font-size: 28px;
+    color: white;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: none;
+    width: 25%;
+    height: 60px;
+    background: linear-gradient(to top,#228B22,#32CD32);
+}
+
+.repeat{
+    font-size: 20px;
+}
+
+@media (max-width: 1430px) {
+    .header {
+        width: 92%;
     }
 }
+
+@media (max-width: 800px){
+    .column {
+        min-width: 300px;
+    }
+
+    .word {
+        font-size: 18px;
+    }
+
+    .win {
+        background-position: 50% 10%;
+        background-size: 90%;
+    }
+
+    .lose {
+        background-position: 50% 10%;
+        background-size: 90%;
+    }
+    .name-statistics{
+        font-size: 2.5em;
+    }
+
+    .statistic{
+        padding-left: 0;
+    }
+
+    .translation {
+        min-width: 150px;
+    }
+
+    .word-text {
+        min-width: 80px;
+    }
+}
+
+@media (max-width: 600px){
+    .win {
+        background-position: 50% 7.5%;
+        background-size: 90%;
+    }
+
+    .lose {
+        background-position: 50% 7.5%;
+        background-size: 90%;
+    }
+    .name-statistics{
+        font-size: 2em;
+    }
+
+    .word {
+        font-size: 13px;
+    }
+
+    .word-text {
+        min-width: 66px;
+    }
+
+    .translation {
+        min-width: 119px;
+    }
+
+    .repeat{
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px){
+    .statistic {
+        max-width: 300px;
+    }
+
+    .column {
+        max-width: 270px;
+        min-width: 200px;
+    }
+
+    .word-text {
+        min-width: 55px;
+    }
+
+    .translation {
+        min-width: 95px;
+    }
+
+    .word {
+        font-size: 11px;
+    }
+
+    .card{
+        margin: 20px 0;
+    }
+
+    .container{
+        padding: 20px 0;
+    }
+
+    .win {
+        background-position: 50% 5%;
+        background-size: 90%;
+    }
+
+    .lose {
+        background-position: 50% 5%;
+        background-size: 90%;
+    }
+
+    .clicks{
+        width: 12%;
+    }
+
+    .correct{;
+        width: 15%;
+    }
+
+    .error{
+        width: 12%;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .word {
+        font-size: 10px;
+    }
+
+    .word-text {
+        min-width: 45px;
+    }
+
+    .translation {
+        min-width: 80px;
+    }
+}
+
+

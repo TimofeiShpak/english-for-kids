@@ -8,8 +8,8 @@
     <title>Document</title>
 </head>
 <body>
-<div class="app-wrapper" onselectstart="return false">
-    <div class="header">
+<div class="app-wrapper" id="app" onselectstart="return false">
+    <div class="header" id="header">
     <div class="menu">
         <div class="burger-menu">
             <input type="checkbox" id="burgerMenu">
@@ -18,7 +18,7 @@
             <span id="thirdSpan"></span>
         </div>
         <div class="list-menu" id="listMenu">
-            <a class="page-link active-link" href="#">Main Page</a>
+            <a class="page-link active-link" id="mainPage" href="#">Main Page</a>
             <a class="page-link" href="#">Action (set A)</a>
             <a class="page-link" href="#">Action (set B)</a>
             <a class="page-link" href="#">Action (set C)</a>
@@ -27,14 +27,15 @@
             <a class="page-link" href="#">Animal (set B)</a>
             <a class="page-link" href="#">Clothes</a>
             <a class="page-link" href="#">Emotion</a>
+            <a class="page-link statistics" id="statisticPage" href="#">Statistics</a>
         </div>
     </div>
-        <div class="label">
+        <div class="label" id="label">
             <input type="checkbox" id="switch1" /><label for="switch1" id="label1">Train</label>
         </div>
 </div>
-        <div class="container">
-            <a class="card" id="firstCard" href="#">
+        <div class="container" id="cardsContainer">
+            <a class="card" href="#">
                 <img src="./img/dance.jpg">
                 Action (set A)
             </a>

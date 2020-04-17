@@ -1,5 +1,5 @@
 const MAX_LEFT = -100;
-const MIN_LEFT = -500;
+const MIN_LEFT = -620;
 
 function animationVisibleMenu() {
   let left = MIN_LEFT;
@@ -22,19 +22,27 @@ function animationHideMenu() {
   }, 10);
 }
 
+function VisibleMenu(){
+  animationVisibleMenu();
+  firstSpan.classList.add("span-first");
+  secondSpan.classList.add("span-second");
+  thirdSpan.classList.add("span-third");
+}
+
+function HideMenu(){
+  animationHideMenu();
+  burgerMenu.checked = false;
+  firstSpan.classList.remove("span-first");
+  secondSpan.classList.remove("span-second");
+  thirdSpan.classList.remove("span-third");
+}
+
 export function changeMenu() {
   document.querySelector("html").addEventListener("click", (item) => {
     if (burgerMenu.checked && item.target.id === "burgerMenu") {
-      animationVisibleMenu();
-      firstSpan.classList.add("span-first");
-      secondSpan.classList.add("span-second");
-      thirdSpan.classList.add("span-third");
+      VisibleMenu();
     } else if (burgerMenu.checked || item.target.id === "burgerMenu") {
-      animationHideMenu();
-      burgerMenu.checked = false;
-      firstSpan.classList.remove("span-first");
-      secondSpan.classList.remove("span-second");
-      thirdSpan.classList.remove("span-third");
+      HideMenu();
     }
   });
 }
@@ -50,3 +58,6 @@ export function activeLink() {
     }
   });
 }
+
+
+
