@@ -90,7 +90,7 @@ const cards = [
     },
     {
       word: "skip",
-      translation: "пропускать",
+      translation: "прыгать",
       image: "img/skip.jpg",
       audioSrc: "audio/skip.mp3",
     },
@@ -259,10 +259,10 @@ const cards = [
       audioSrc: "audio/bird.mp3",
     },
     {
-      word: "fish",
-      translation: "рыба",
-      image: "img/fish1.jpg",
-      audioSrc: "audio/fish.mp3",
+      word: "elephant",
+      translation: "слон",
+      image: "img/elephant.jpg",
+      audioSrc: "audio/elephant.mp3",
     },
     {
       word: "frog",
