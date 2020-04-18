@@ -1,5 +1,5 @@
 import cards from "./cards.js";
-import {cardsPlay, removeStars} from"./play.js";
+import { cardsPlay, removeStars } from "./play.js";
 import { statistic, hideStatistics } from "./statistics.js";
 
 let pageCards = [];
@@ -41,7 +41,7 @@ export function writeText() {
   }
 }
 
-function MainPage(){
+function MainPage() {
   removeRotate();
   document.querySelectorAll(".card").forEach((item) => {
     item.classList.remove("card-game");
@@ -55,7 +55,7 @@ function MainPage(){
   }
 }
 
-function playPages(){
+function playPages() {
   if (rotateButtons[0]) {
     removeRotate();
   }
@@ -84,14 +84,14 @@ export function changePage() {
   }
 }
 
-function removeBackgroundCard(){
-  for(let i=0; i<pageCards.length; i++){
+function removeBackgroundCard() {
+  for (let i = 0; i < pageCards.length; i++) {
     pageCards[i].classList.remove("cardPlay");
   }
 }
 
-function addBackgroundCard(){
-  if(switch1.checked) {
+function addBackgroundCard() {
+  if (switch1.checked) {
     for (let i = 0; i < pageCards.length; i++) {
       pageCards[i].classList.add("cardPlay");
     }
@@ -124,25 +124,22 @@ export function numberPage() {
 }
 
 export function activeCard() {
-    cardsContainer.addEventListener("click", (item) => {
-      let itemNode = item.target.nodeName;
-      let text = "";
-      let pageNumber = numberPage();
-      if(itemNode === "IMG") {
-        text = item.target.parentElement.innerText;
-      } else {
-        text = item.target.innerText;
+  cardsContainer.addEventListener("click", (item) => {
+    let itemNode = item.target.nodeName;
+    let text = "";
+    let pageNumber = numberPage();
+    if (itemNode === "IMG") {
+      text = item.target.parentElement.innerText;
+    } else {
+      text = item.target.innerText;
+    }
+    if (pageNumber < 1) {
+      let nameClass = item.target.className;
+      if (nameClass !== "container") {
+        page = text;
+        pageNumber = numberPage();
+        pageLinks[pageNumber].click();
       }
-      if (pageNumber < 1) {
-        let nameClass = item.target.className;
-        if (nameClass !== "container") {
-          page = text;
-          pageNumber = numberPage();
-          pageLinks[pageNumber].click();
-        }
-      }
-    });
+    }
+  });
 }
-
-
-

@@ -16,9 +16,3 @@ Game();
 hideStatistics();
 resetButton();
 createStatistic();
-
-/* switch1.addEventListener('click', () => {
-    import('./js/label.js').then(module =>{
-        module.switchLabel();
-    });
-}); */

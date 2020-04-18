@@ -1,8 +1,8 @@
-import {numberPage, changePage } from "./pages.js";
-import {cardsPlay} from "./play.js";
+import { numberPage, changePage } from "./pages.js";
+import { cardsPlay } from "./play.js";
 
 let page = 0;
-function addStyles(){
+function addStyles() {
   label1.innerText = "Play";
   label1.classList.add("labelPlay");
   listMenu.classList.add("list-menu-label");
@@ -13,7 +13,7 @@ function addStyles(){
   }
 }
 
-function removeStyles(){
+function removeStyles() {
   if (page < 1) {
     document.querySelectorAll(".card").forEach((card) => {
       card.classList.remove("cardPlay");
@@ -28,7 +28,7 @@ export function switchLabel() {
   switch1.addEventListener("click", () => {
     changePage();
     page = numberPage();
-    if(page>0){
+    if (page > 0) {
       cardsPlay();
     }
     if (switch1.checked) {

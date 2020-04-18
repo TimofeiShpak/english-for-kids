@@ -22,14 +22,14 @@ function animationHideMenu() {
   }, 10);
 }
 
-function VisibleMenu(){
+function VisibleMenu() {
   animationVisibleMenu();
   firstSpan.classList.add("span-first");
   secondSpan.classList.add("span-second");
   thirdSpan.classList.add("span-third");
 }
 
-function HideMenu(){
+function HideMenu() {
   animationHideMenu();
   burgerMenu.checked = false;
   firstSpan.classList.remove("span-first");
@@ -58,6 +58,3 @@ export function activeLink() {
     }
   });
 }
-
-
-
