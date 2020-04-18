@@ -113,7 +113,7 @@ export function moveLink() {
       } else {
         addBackgroundCard();
       }
-    } else {
+    } else if (nameClass === "page-link statistics active-link") {
       statistic();
     }
   });
