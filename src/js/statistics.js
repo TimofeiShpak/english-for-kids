@@ -165,6 +165,7 @@ statistics.addEventListener("click", (item) => {
 });
 
 newPage.addEventListener("click", () => {
+  checkSort = false;
   percent.click();
   checkNewPage = !checkNewPage;
   if (checkNewPage) {
@@ -173,7 +174,7 @@ newPage.addEventListener("click", () => {
       statisticsWords[i].classList.add("hide");
     }
     for (let i = 0; i < MAX_WORDS_DIFFICULT; i++) {
-      if (statisticsWords[i].children[2].innerText === "0") {
+      if (statisticsWords[i].children[4].innerText === "0") {
         statisticsWords[i].classList.add("hide");
       }
     }
