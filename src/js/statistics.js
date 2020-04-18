@@ -38,6 +38,10 @@ if (localStorage.user) {
   words = JSON.parse(localStorage.user);
 }
 
+function saveStatistics() {
+  localStorage.user = JSON.stringify(words);
+}
+
 let statisticsWords = [];
 
 export function createStatistic() {
@@ -93,6 +97,7 @@ export function resetButton() {
     }
     hideNewPage();
     changeStatistic();
+    saveStatistics();
   });
 }
 
@@ -200,7 +205,7 @@ function removeStyle(...args) {
 
 export function statistic() {
   changeStatistic();
-  localStorage.user = JSON.stringify(words);
+  saveStatistics();
   addStyle(label, cardsContainer);
   removeStyle(statistics, nameStatistics, reset, newPage);
   app.classList.add("statistic-wrapper");
