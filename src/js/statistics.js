@@ -1,8 +1,6 @@
 import cards from "./cards.js";
 
-const MAX_WORDS_DIFFICULT = 8;
-
-function create(tag, nameClass, text, parentElement) {
+export function create(tag, nameClass, text, parentElement) {
   let item = document.createElement(tag);
   item.classList.add(nameClass);
   if (text) {
@@ -21,11 +19,15 @@ newPage.classList.add("repeat");
 let statistics = create("div", "statistic", null, app);
 let sections = create("p", "word", null, statistics);
 sections.classList.add("cursor");
-create("b", "word-text", "word↑↓", sections);
-create("b", "translation", "translation↑↓", sections);
-create("b", "clicks", "clicks↑↓", sections);
-create("b", "correct", "correct↑↓", sections);
-create("b", "error", "error↑↓", sections);
+
+function createSections(args) {
+  for (let i = 1; i < args.length; i++) {
+    create("b", args[i][0], args[i][1], args[0]);
+  }
+}
+let section = [sections, ["word-text", "word↑↓"], ["translation", "translation↑↓"], ["clicks", "clicks↑↓"],
+  ["correct", "correct↑↓"], ["error", "error↑↓"]];
+createSections(section);
 let percent = create("b", "percent", "%↑↓", sections);
 
 let typesSection = [];
@@ -44,17 +46,17 @@ function saveStatistics() {
 
 let statisticsWords = [];
 
+let rows = [null, ["", ""], ["", ""], ["clicks", "0"],
+  ["correct", "0"], ["error", "0"], ["percent", "0"]];
 export function createStatistic() {
   for (let i = 1; i < cards.length; i++) {
     let column = create("div", "column", null, statistics);
     for (let j = 0; j < cards[i].length; j++) {
       let text = create("p", "word", null, column);
-      create("b", "word-text", cards[i][j].word, text);
-      create("b", "translation", cards[i][j].translation, text);
-      create("b", "clicks", "0", text);
-      create("b", "correct", "0", text);
-      create("b", "error", "0", text);
-      create("b", "percent", "0", text);
+      rows[0] = text;
+      rows[1] = ["word-text", cards[i][j].word];
+      rows[2] = ["translation", cards[i][j].translation];
+      createSections(rows);
       statisticsWords.push(text);
     }
   }
@@ -67,14 +69,18 @@ function hideNewPage() {
   }
 }
 
+function changeProperties(obj) {
+  obj.number = 0;
+  obj.correct = 0;
+  obj.error = 0;
+}
+
 function changeStatistic() {
   for (let i = 0; i < statisticsWords.length; i++) {
     let key = `${statisticsWords[i].children[0].innerText}`;
     if (words[key] === undefined) {
       words[key] = {};
-      words[key].number = 0;
-      words[key].correct = 0;
-      words[key].error = 0;
+      changeProperties(words[key]);
     }
     statisticsWords[i].children[2].innerText = words[key].number;
     statisticsWords[i].children[3].innerText = words[key].correct;
@@ -91,9 +97,7 @@ function changeStatistic() {
 export function resetButton() {
   reset.addEventListener("click", () => {
     for (let key in words) {
-      words[`${key}`].number = 0;
-      words[`${key}`].correct = 0;
-      words[`${key}`].error = 0;
+      changeProperties(words[`${key}`]);
     }
     hideNewPage();
     changeStatistic();
@@ -104,9 +108,7 @@ export function resetButton() {
 export function numberTaps(item) {
   if (words[`${item}`] === undefined) {
     words[`${item}`] = {};
-    words[`${item}`].number = 0;
-    words[`${item}`].correct = 0;
-    words[`${item}`].error = 0;
+    changeProperties(words[`${item}`]);
   }
   words[`${item}`].number++;
 }
@@ -159,15 +161,21 @@ statistics.addEventListener("click", (item) => {
         sortStatistic(position);
       }
     }
-    let text = item.target.innerText;
-    if (checkSort) {
-      text = `${item.target.innerText.slice(0, -1)}↓`;
-    } else {
-      text = `${item.target.innerText.slice(0, -1)}↑`;
-    }
     checkSort = !checkSort;
   }
 });
+
+export function addStyle(...args) {
+  for (let arg of args) {
+    arg.classList.add("hide");
+  }
+}
+
+export function removeStyle(...args) {
+  for (let arg of args) {
+    arg.classList.remove("hide");
+  }
+}
 
 newPage.addEventListener("click", () => {
   checkSort = false;
@@ -175,33 +183,18 @@ newPage.addEventListener("click", () => {
   checkNewPage = !checkNewPage;
   if (checkNewPage) {
     newPage.innerText = "come back";
-    for (let i = MAX_WORDS_DIFFICULT; i < statisticsWords.length; i++) {
-      statisticsWords[i].classList.add("hide");
-    }
-    for (let i = 0; i < MAX_WORDS_DIFFICULT; i++) {
+    for (let i = 0; i < statisticsWords.length; i++) {
       if (statisticsWords[i].children[4].innerText === "0") {
-        statisticsWords[i].classList.add("hide");
+        addStyle(statisticsWords[i]);
       }
     }
   } else {
     newPage.innerText = "repeat difficult words";
     for (let i = 0; i < statisticsWords.length; i++) {
-      statisticsWords[i].classList.remove("hide");
+      removeStyle(statisticsWords[i]);
     }
   }
 });
-
-function addStyle(...args) {
-  for (let arg of args) {
-    arg.classList.add("hide");
-  }
-}
-
-function removeStyle(...args) {
-  for (let arg of args) {
-    arg.classList.remove("hide");
-  }
-}
 
 export function statistic() {
   changeStatistic();

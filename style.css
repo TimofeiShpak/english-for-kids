@@ -132,7 +132,7 @@ label:active:after {
     height: 100vh;
     margin: -80px 0 0;
     padding: 150px 0px 50px 100px;
-    left: -620px;
+    left: -1000px;
     list-style-type: none;
 }
 
@@ -142,10 +142,6 @@ label:active:after {
 
 .list-menu-label{
     background-color: #228B22;
-}
-
-.menu-down {
-  left: calc(675px - 50vw);
 }
 
 .page-link{
@@ -310,12 +306,16 @@ label:active:after {
     background: url(./img/failure.jpg);
     background-repeat: no-repeat;
     background-position: 50% 30%;
+    width: 100%;
+    height: 100vh;
 }
 
 .win {
     background: url(./img/success.jpg);
     background-repeat: no-repeat;
     background-position: 50% 30%;
+    width: 100%;
+    height: 100vh;
 }
 
 .text {
@@ -520,7 +520,7 @@ label:active:after {
         width: 12%;
     }
 
-    .correct{;
+    .correct{
         width: 15%;
     }
 

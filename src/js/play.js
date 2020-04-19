@@ -1,17 +1,15 @@
 import { cardsPage, writeText, numberPage } from "./pages.js";
 import cards from "./cards";
 import { soundClick } from "./rotateAnimation.js";
-import { numberTaps, correctTaps, errorTaps } from "./statistics.js";
+import {
+  numberTaps, correctTaps, errorTaps, create, addStyle, removeStyle,
+} from "./statistics.js";
 
 const MIN_TAPS = 8;
 
-let buttonStart = document.createElement("button");
-buttonStart.classList.add("button-start");
-buttonStart.innerText = "Start game";
-let raiting = document.createElement("div");
-raiting.classList.add("raiting");
-let text = document.createElement("p");
-text.classList.add("text");
+let buttonStart = create("button", "button-start", "Start game");
+let raiting = create("div", "raiting");
+let text = create("p", "text");
 
 export function removeStars() {
   for (let i = 0; i < raiting.children.length; i++) {
@@ -20,15 +18,11 @@ export function removeStars() {
 }
 
 function addStarWin() {
-  let starWin = document.createElement("div");
-  starWin.classList.add("star-win");
-  raiting.append(starWin);
+  create("div", "star-win", null, raiting);
 }
 
 function addStar() {
-  let star = document.createElement("div");
-  star.classList.add("star");
-  raiting.append(star);
+  create("div", "star", null, raiting);
 }
 
 function cardGame() {
@@ -117,8 +111,7 @@ function failure() {
 
 function win() {
   removeClass();
-  cardsContainer.classList.add("visible");
-  label.classList.add("visible");
+  addStyle(cardsContainer, label, buttonStart);
   if (taps > MIN_TAPS) {
     failure();
   } else {
@@ -126,8 +119,7 @@ function win() {
   }
   header.after(text);
   setTimeout(() => {
-    cardsContainer.classList.remove("visible");
-    label.classList.remove("visible");
+    removeStyle(cardsContainer, label, buttonStart);
     app.classList.remove("win");
     app.classList.remove("lose");
     text.remove();
@@ -135,6 +127,7 @@ function win() {
   }, 2000);
 }
 
+let time = 500;
 function checkWin() {
   if (numberSound > 7) {
     setTimeout(() => {
@@ -142,8 +135,14 @@ function checkWin() {
     }, 500);
   } else {
     setTimeout(() => {
+      if (numberSound > 5) {
+        time = 0;
+      } else {
+        time = 500;
+      }
+      console.log(time);
       soundClick(sounds[numberSound]);
-    }, 500);
+    }, time);
   }
 }
 
@@ -155,6 +154,12 @@ function correctCard(item) {
   numberSound++;
 }
 
+function errorCard() {
+  errorTaps(cards[pageNumber][position].word);
+  soundClick("./audio/error.mp3");
+  addStar();
+}
+
 function validationCard(item) {
   position = cardsPage.indexOf(item.target, 0);
   let cardTap = cards[pageNumber][position].audioSrc;
@@ -164,9 +169,7 @@ function validationCard(item) {
     if (cardTap === sound) {
       correctCard(item);
     } else {
-      errorTaps(cards[pageNumber][position].word);
-      soundClick("./audio/error.mp3");
-      addStar();
+      errorCard();
     }
   }
 }
@@ -200,11 +203,9 @@ function changePageGame() {
     if (nameClass !== "list-menu" && nameClass !== "list-menu list-menu-label") {
       pageNumber = numberPage();
       if (pageNumber < 1 || item.target.innerText === "Statistics") {
-        buttonStart.classList.add("hide");
-        raiting.classList.add("hide");
+        addStyle(buttonStart, raiting);
       } else {
-        buttonStart.classList.remove("hide");
-        raiting.classList.remove("hide");
+        removeStyle(buttonStart, raiting);
       }
       restartGame();
     }

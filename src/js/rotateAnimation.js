@@ -10,18 +10,23 @@ export function soundClick(adress) {
   audio.autoplay = true; // Автоматически запускаем
 }
 
+let degress = 0;
+let additionDegress = 0;
+
 function rotateFromFront(item) {
-  let degress = 0;
-  setInterval(() => {
-    if (degress < 360) {
+  degress = 10;
+  let interval = setInterval(() => {
+    if (degress < 180 && degress > 0) {
       if (degress === 90) {
         item.childNodes[2].textContent = cards[pageNumber][position].translation;
-        degress = 270;
+        additionDegress = 180;
         item.childNodes[3].classList.add("hide");
       }
       degress += 5;
-      item.style.transform = `rotateY(${degress}deg)`;
+      item.style.transform = `rotateY(${degress + additionDegress}deg)`;
       item.classList.add("animation-rotate");
+    } else {
+      clearInterval(interval);
     }
   }, 10);
 }
@@ -39,16 +44,15 @@ export function animationRotate() {
 }
 
 function rotateFromBack(item) {
-  let degress = 360;
   let interval = setInterval(() => {
     if (degress > 0) {
-      if (degress === 270) {
+      if (degress <= 90) {
         item.childNodes[2].textContent = cards[pageNumber][position].word;
-        degress = 90;
+        additionDegress = 0;
         item.childNodes[3].classList.remove("hide");
       }
-      degress -= 5;
-      item.style.transform = `rotateY(${degress}deg)`;
+      degress -= 8;
+      item.style.transform = `rotateY(${degress + additionDegress}deg)`;
     } else {
       clearInterval(interval);
       item.style.transform = "";
@@ -56,12 +60,20 @@ function rotateFromBack(item) {
   }, 10);
 }
 
-export function animationNotrotate() {
-  document.querySelector(".container").addEventListener("mouseout", (item) => {
+function removeRotate(item) {
+  if (item.className === "card card-game animation-rotate") {
+    item.classList.remove("animation-rotate");
+    rotateFromBack(item);
+  }
+}
+
+export function animationCheckRotate() {
+  document.querySelector(".container").addEventListener("mousemove", (item) => {
     let elementClass = item.target.className;
-    if (elementClass === "card card-game animation-rotate") {
-      item.target.classList.remove("animation-rotate");
-      rotateFromBack(item.target);
+    if (elementClass !== "card card-game animation-rotate") {
+      for (let i = 0; i < cardsPage.length; i++) {
+        removeRotate(cardsPage[i]);
+      }
     }
   });
 }

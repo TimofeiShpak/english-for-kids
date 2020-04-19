@@ -1,19 +1,34 @@
 const MAX_LEFT = -100;
 const MIN_LEFT = -620;
+let additionLeft = 0;
+
+
+function resize() {
+  if (app.clientWidth > 1500) {
+    additionLeft = (app.clientWidth - 1500) / 2;
+  } else {
+    additionLeft = 0;
+  }
+}
+resize();
+
+window.addEventListener("resize", () => {
+  resize();
+});
 
 function animationVisibleMenu() {
-  let left = MIN_LEFT;
+  let left = MIN_LEFT - additionLeft;
   setInterval(() => {
-    if (left < MAX_LEFT) {
+    if (left < (MAX_LEFT - additionLeft)) {
       left += 10; listMenu.style.left = `${left}px`;
     }
   }, 10);
 }
 
 function animationHideMenu() {
-  let left = MAX_LEFT;
+  let left = MAX_LEFT - additionLeft;
   let interval = setInterval(() => {
-    if (left > MIN_LEFT) {
+    if (left > (MIN_LEFT - additionLeft)) {
       left -= 10; listMenu.style.left = `${left}px`;
     } else {
       listMenu.style.left = "";
