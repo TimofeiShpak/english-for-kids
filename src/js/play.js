@@ -140,7 +140,6 @@ function checkWin() {
       } else {
         time = 500;
       }
-      console.log(time);
       soundClick(sounds[numberSound]);
     }, time);
   }
