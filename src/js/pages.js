@@ -1,13 +1,15 @@
 import cards from "./cards.js";
-import { cardsPlay, removeStars } from "./play.js";
+import { cardsPlay, removeStars, checkIsGame } from "./play.js";
 import { statistic, hideStatistics } from "./statistics.js";
+
+const unuseElement = ["list-menu", "list-menu list-menu-label", "page-link statistics active-link"];
 
 let pageCards = [];
 document.querySelectorAll(".card").forEach((card) => {
   pageCards.push(card);
 });
 
-export let cardsPage = pageCards;
+export default pageCards;
 
 let pageLinks = [];
 document.querySelectorAll(".page-link").forEach((card) => {
@@ -15,13 +17,13 @@ document.querySelectorAll(".page-link").forEach((card) => {
 });
 let page = "Main Page";
 let numberPages = {};
-for (let i = 0; i < 9; i++) {
+for (let i = 0; i < 9; i += 1) {
   numberPages[cards[0][i]] = i;
 }
 
 let rotateButtons = [];
 export function addRotate() {
-  for (let i = 0; i < pageCards.length; i++) {
+  for (let i = 0; i < pageCards.length; i += 1) {
     let buttonRotate = document.createElement("div");
     rotateButtons.push(buttonRotate);
     buttonRotate.classList.add("button-rotate");
@@ -30,29 +32,49 @@ export function addRotate() {
 }
 
 export function removeRotate() {
-  for (let i = 0; i < rotateButtons.length; i++) {
+  for (let i = 0; i < rotateButtons.length; i += 1) {
     rotateButtons[i].remove();
   }
 }
 
 export function writeText() {
-  for (let i = 0; i < pageCards.length; i++) {
+  for (let i = 0; i < pageCards.length; i += 1) {
     pageCards[i].childNodes[2].textContent = cards[numberPages[page]][i].word;
   }
 }
 
-function MainPage() {
-  removeRotate();
+export function numberPage() {
+  return numberPages[page];
+}
+
+export function soundClick(adress) {
+  let audio = new Audio(); // Создаём новый элемент Audio
+  audio.src = adress; // Указываем путь к звуку "клика"
+  audio.autoplay = true; // Автоматически запускаем
+}
+
+function changeCardsForMainPage() {
   document.querySelectorAll(".card").forEach((item) => {
+    let styles = item.style;
     item.classList.remove("card-game");
-    item.style.backgroundImage = "";
+    styles.backgroundImage = "";
   });
   document.querySelectorAll("img").forEach((item) => {
-    item.style.display = "block";
+    let styles = item.style;
+    styles.display = "block";
   });
-  for (let i = 0; i < pageCards.length; i++) {
+  removeRotate();
+}
+
+function drawMainPage() {
+  for (let i = 0; i < pageCards.length; i += 1) {
     pageCards[i].childNodes[2].textContent = cards[numberPages[page]][i + 1];
   }
+}
+
+function MainPage() {
+  changeCardsForMainPage();
+  drawMainPage();
 }
 
 function playPages() {
@@ -62,15 +84,18 @@ function playPages() {
   if (!switch1.checked) {
     addRotate();
   }
-  let numberCards = 0;
+  let numberCards = -1;
   document.querySelectorAll(".card").forEach((item) => {
-    item.style.background = `url(\"${cards[numberPages[page]][numberCards++].image}\")`;
+    let styles = item.style;
+    numberCards += 1;
+    styles.background = `url(${cards[numberPages[page]][numberCards].image})`;
     item.classList.add("card-game");
   });
   writeText();
-  for (let i = 0; i < pageCards.length; i++) {
+  for (let i = 0; i < pageCards.length; i += 1) {
     document.querySelectorAll("img").forEach((item) => {
-      item.style.display = "none";
+      let styles = item.style;
+      styles.display = "none";
     });
   }
 }
@@ -85,20 +110,18 @@ export function changePage() {
 }
 
 function removeBackgroundCard() {
-  for (let i = 0; i < pageCards.length; i++) {
+  for (let i = 0; i < pageCards.length; i += 1) {
     pageCards[i].classList.remove("cardPlay");
   }
 }
 
 function addBackgroundCard() {
   if (switch1.checked) {
-    for (let i = 0; i < pageCards.length; i++) {
+    for (let i = 0; i < pageCards.length; i += 1) {
       pageCards[i].classList.add("cardPlay");
     }
   }
 }
-
-let unuseElement = ["list-menu", "list-menu list-menu-label", "page-link statistics active-link"];
 
 export function moveLink() {
   listMenu.addEventListener("click", (item) => {
@@ -119,11 +142,7 @@ export function moveLink() {
   });
 }
 
-export function numberPage() {
-  return numberPages[page];
-}
-
-export function activeCard() {
+export function activeCardLinks() {
   cardsContainer.addEventListener("click", (item) => {
     let itemNode = item.target.nodeName;
     let text = "";
@@ -141,5 +160,19 @@ export function activeCard() {
         pageLinks[pageNumber].click();
       }
     }
+  });
+}
+
+export function activeCards() {
+  pageCards.forEach((item) => {
+    item.addEventListener("click", (card) => {
+      let isGame = checkIsGame();
+      let position = pageCards.indexOf(card.target, 0);
+      let pageNumber = numberPage();
+      let cardClassName = card.target.className;
+      if (pageNumber > 0 && cardClassName !== "button-rotate" && !isGame) {
+        soundClick(cards[pageNumber][position].audioSrc);
+      }
+    });
   });
 }

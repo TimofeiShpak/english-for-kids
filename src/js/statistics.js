@@ -1,16 +1,5 @@
 import cards from "./cards.js";
-
-export function create(tag, nameClass, text, parentElement) {
-  let item = document.createElement(tag);
-  item.classList.add(nameClass);
-  if (text) {
-    item.innerText = text;
-  }
-  if (parentElement) {
-    parentElement.append(item);
-  }
-  return item;
-}
+import { create } from "./play.js";
 
 let nameStatistics = create("p", "name-statistics", "statistics of game", app);
 let reset = create("button", "reset", "reset", app);
@@ -21,7 +10,7 @@ let sections = create("p", "word", null, statistics);
 sections.classList.add("cursor");
 
 function createSections(args) {
-  for (let i = 1; i < args.length; i++) {
+  for (let i = 1; i < args.length; i += 1) {
     create("b", args[i][0], args[i][1], args[0]);
   }
 }
@@ -31,7 +20,7 @@ createSections(section);
 let percent = create("b", "percent", "%↑↓", sections);
 
 let typesSection = [];
-for (let i = 0; i < sections.children.length; i++) {
+for (let i = 0; i < sections.children.length; i += 1) {
   typesSection.push(sections.children[i]);
 }
 
@@ -49,9 +38,9 @@ let statisticsWords = [];
 let rows = [null, ["", ""], ["", ""], ["clicks", "0"],
   ["correct", "0"], ["error", "0"], ["percent", "0"]];
 export function createStatistic() {
-  for (let i = 1; i < cards.length; i++) {
+  for (let i = 1; i < cards.length; i += 1) {
     let column = create("div", "column", null, statistics);
-    for (let j = 0; j < cards[i].length; j++) {
+    for (let j = 0; j < cards[i].length; j += 1) {
       let text = create("p", "word", null, column);
       rows[0] = text;
       rows[1] = ["word-text", cards[i][j].word];
@@ -70,13 +59,14 @@ function hideNewPage() {
 }
 
 function changeProperties(obj) {
-  obj.number = 0;
-  obj.correct = 0;
-  obj.error = 0;
+  let element = obj;
+  element.number = 0;
+  element.correct = 0;
+  element.error = 0;
 }
 
 function changeStatistic() {
-  for (let i = 0; i < statisticsWords.length; i++) {
+  for (let i = 0; i < statisticsWords.length; i += 1) {
     let key = `${statisticsWords[i].children[0].innerText}`;
     if (words[key] === undefined) {
       words[key] = {};
@@ -97,7 +87,9 @@ function changeStatistic() {
 export function resetButton() {
   reset.addEventListener("click", () => {
     for (let key in words) {
-      changeProperties(words[`${key}`]);
+      if ({}.hasOwnProperty.call(words, key)) {
+        changeProperties(words[`${key}`]);
+      }
     }
     hideNewPage();
     changeStatistic();
@@ -110,15 +102,15 @@ export function numberTaps(item) {
     words[`${item}`] = {};
     changeProperties(words[`${item}`]);
   }
-  words[`${item}`].number++;
+  words[`${item}`].number += 1;
 }
 
 export function correctTaps(item) {
-  words[`${item}`].correct++;
+  words[`${item}`].correct += 1;
 }
 
 export function errorTaps(item) {
-  words[`${item}`].error++;
+  words[`${item}`].error += 1;
 }
 
 let checkSort = false;
@@ -154,10 +146,10 @@ statistics.addEventListener("click", (item) => {
   let { className } = item.target.parentElement;
   if (className === "word cursor") {
     let position = typesSection.indexOf(item.target);
-    if (position + 1) {
+    if (position > -1) {
       let times = 0;
       while (times < 2) {
-        times++;
+        times += 1;
         sortStatistic(position);
       }
     }
@@ -183,14 +175,14 @@ newPage.addEventListener("click", () => {
   checkNewPage = !checkNewPage;
   if (checkNewPage) {
     newPage.innerText = "come back";
-    for (let i = 0; i < statisticsWords.length; i++) {
+    for (let i = 0; i < statisticsWords.length; i += 1) {
       if (statisticsWords[i].children[4].innerText === "0") {
         addStyle(statisticsWords[i]);
       }
     }
   } else {
     newPage.innerText = "repeat difficult words";
-    for (let i = 0; i < statisticsWords.length; i++) {
+    for (let i = 0; i < statisticsWords.length; i += 1) {
       removeStyle(statisticsWords[i]);
     }
   }

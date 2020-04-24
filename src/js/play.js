@@ -1,19 +1,40 @@
-import { cardsPage, writeText, numberPage } from "./pages.js";
+import pageCards, { writeText, numberPage, soundClick } from "./pages.js";
 import cards from "./cards";
-import { soundClick } from "./rotateAnimation.js";
 import {
-  numberTaps, correctTaps, errorTaps, create, addStyle, removeStyle,
+  numberTaps, correctTaps, errorTaps, addStyle, removeStyle,
 } from "./statistics.js";
+import { isListMenu } from "./menu.js";
 
 const MIN_TAPS = 8;
+const LAST_CARD = 7;
+const PENULTIMATE_CARD = 5;
+
+export function create(tag, nameClass, text, parentElement) {
+  let item = document.createElement(tag);
+  item.classList.add(nameClass);
+  if (text) {
+    item.innerText = text;
+  }
+  if (parentElement) {
+    parentElement.append(item);
+  }
+  return item;
+}
 
 let buttonStart = create("button", "button-start", "Start game");
 let raiting = create("div", "raiting");
 let text = create("p", "text");
+let taps = 0;
+let time = 500;
+let isGameActive = false;
+let pageNumber = 0;
+let sounds = [];
+let numberSound = 0;
+let position = 0;
 
 export function removeStars() {
-  for (let i = 0; i < raiting.children.length; i++) {
-    raiting.children[i].remove(); i--;
+  for (let i = 0; i < raiting.children.length; i += 1) {
+    raiting.children[i].remove(); i -= 1;
   }
 }
 
@@ -26,9 +47,9 @@ function addStar() {
 }
 
 function cardGame() {
-  for (let i = 0; i < cardsPage.length; i++) {
-    cardsPage[i].classList.add("cardGame");
-    cardsPage[i].childNodes[2].textContent = "";
+  for (let i = 0; i < pageCards.length; i += 1) {
+    pageCards[i].classList.add("cardGame");
+    pageCards[i].childNodes[2].textContent = "";
     app.append(buttonStart);
     cardsContainer.prepend(raiting);
   }
@@ -36,8 +57,8 @@ function cardGame() {
 
 function cardTrain() {
   writeText();
-  for (let i = 0; i < cardsPage.length; i++) {
-    cardsPage[i].classList.remove("cardGame");
+  for (let i = 0; i < pageCards.length; i += 1) {
+    pageCards[i].classList.remove("cardGame");
     buttonStart.remove();
   }
 }
@@ -50,23 +71,19 @@ export function cardsPlay() {
   }
 }
 
-let game = false;
-let pageNumber = 0;
-let sounds = [];
-let numberSound = 0;
-let position = 0;
 function soundsPage() {
   pageNumber = numberPage();
-  for (let i = 0; i < cards[pageNumber].length; i++) {
+  for (let i = 0; i < cards[pageNumber].length; i += 1) {
     sounds.push(cards[pageNumber][i].audioSrc);
   }
 }
 
-function shuffle(arr) {
+function shuffle(array) {
+  let arr = array;
   let first = 0;
   let second = 0;
   let temp = 0;
-  for (let i = 0; i < (arr.length - 2); i++) {
+  for (let i = 0; i < (arr.length - 2); i += 1) {
     do {
       first = Math.floor(Math.random() * (arr.length));
       second = Math.floor(Math.random() * (arr.length));
@@ -83,16 +100,14 @@ function startGame() {
   soundsPage();
   shuffle(sounds);
   soundClick(sounds[numberSound]);
-  game = true;
+  isGameActive = true;
 }
 
-let taps = 0;
-
-function removeClass() {
-  for (let i = 0; i < cardsPage.length; i++) {
-    cardsPage[i].classList.remove("card-active");
+function disableCard() {
+  for (let i = 0; i < pageCards.length; i += 1) {
+    pageCards[i].classList.remove("card-active");
     if (pageNumber < 1) {
-      cardsPage[i].classList.remove("cardGame");
+      pageCards[i].classList.remove("cardGame");
     }
   }
 }
@@ -110,7 +125,7 @@ function failure() {
 }
 
 function win() {
-  removeClass();
+  disableCard();
   addStyle(cardsContainer, label, buttonStart);
   if (taps > MIN_TAPS) {
     failure();
@@ -127,15 +142,14 @@ function win() {
   }, 2000);
 }
 
-let time = 500;
 function checkWin() {
-  if (numberSound > 7) {
+  if (numberSound > LAST_CARD) {
     setTimeout(() => {
       win();
     }, 500);
   } else {
     setTimeout(() => {
-      if (numberSound > 5) {
+      if (numberSound > PENULTIMATE_CARD) {
         time = 0;
       } else {
         time = 500;
@@ -150,7 +164,7 @@ function correctCard(item) {
   soundClick("./audio/correct.mp3");
   item.target.classList.add("card-active");
   addStarWin();
-  numberSound++;
+  numberSound += 1;
 }
 
 function errorCard() {
@@ -160,7 +174,7 @@ function errorCard() {
 }
 
 function validationCard(item) {
-  position = cardsPage.indexOf(item.target, 0);
+  position = pageCards.indexOf(item.target, 0);
   let cardTap = cards[pageNumber][position].audioSrc;
   numberTaps(cards[pageNumber][position].word);
   let sound = sounds[numberSound];
@@ -175,10 +189,10 @@ function validationCard(item) {
 
 function tapCard() {
   document.querySelector(".container").addEventListener("click", (item) => {
-    if (game) {
+    if (isGameActive) {
       let elementClass = item.target.className;
       if (elementClass.includes("cardGame") && !elementClass.includes("card-active")) {
-        taps++;
+        taps += 1;
         validationCard(item);
         checkWin();
       }
@@ -188,18 +202,18 @@ function tapCard() {
 
 function restartGame() {
   numberSound = 0;
-  game = false;
+  isGameActive = false;
   buttonStart.classList.remove("button-start-active");
   buttonStart.innerText = "Start game";
   sounds.length = 0;
   taps = 0;
-  removeClass();
+  disableCard();
 }
 
 function changePageGame() {
   listMenu.addEventListener("click", (item) => {
     let nameClass = item.target.className;
-    if (nameClass !== "list-menu" && nameClass !== "list-menu list-menu-label") {
+    if (!isListMenu.includes(nameClass)) {
       pageNumber = numberPage();
       if (pageNumber < 1 || item.target.innerText === "Statistics") {
         addStyle(buttonStart, raiting);
@@ -211,9 +225,13 @@ function changePageGame() {
   });
 }
 
+export function checkIsGame() {
+  return isGameActive === true;
+}
+
 export function Game() {
   buttonStart.addEventListener("click", () => {
-    if (!game) {
+    if (!isGameActive) {
       startGame();
     } else {
       soundClick(sounds[numberSound]);

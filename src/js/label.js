@@ -24,7 +24,7 @@ function removeStyles() {
   listMenu.classList.remove("list-menu-label");
 }
 
-export function switchLabel() {
+export default function switchLabel() {
   switch1.addEventListener("click", () => {
     changePage();
     page = numberPage();
