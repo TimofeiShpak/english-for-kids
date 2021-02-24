@@ -3,7 +3,7 @@ import cards from "./cards";
 import {
   numberTaps, correctTaps, errorTaps, addStyle, removeStyle,
 } from "./statistics.js";
-import { isListMenu } from "./menu.js";
+import { LIST_MENU_CLASS_NAME } from "./menu.js";
 
 const MIN_TAPS = 8;
 const LAST_CARD = 7;
@@ -213,7 +213,7 @@ function restartGame() {
 function changePageGame() {
   listMenu.addEventListener("click", (item) => {
     let nameClass = item.target.className;
-    if (!isListMenu.includes(nameClass)) {
+    if (!LIST_MENU_CLASS_NAME.includes(nameClass)) {
       pageNumber = numberPage();
       if (pageNumber < 1 || item.target.innerText === "Statistics") {
         addStyle(buttonStart, raiting);

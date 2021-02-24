@@ -1,7 +1,7 @@
 const MAX_LEFT = -100;
 const MIN_LEFT = -620;
 let additionLeft = 0;
-export let isListMenu = ["list-menu", "list-menu list-menu-label"];
+export const LIST_MENU_CLASS_NAME = ["list-menu", "list-menu list-menu-label"];
 
 function resize() {
   if (app.clientWidth > 1500) {
@@ -65,7 +65,7 @@ export function changeMenu() {
 export function activeLink() {
   listMenu.addEventListener("click", (item) => {
     let nameClass = item.target.className;
-    if (!isListMenu.includes(nameClass)) {
+    if (!LIST_MENU_CLASS_NAME.includes(nameClass)) {
       document.querySelectorAll(".page-link").forEach((link) => {
         link.classList.remove("active-link");
       });
